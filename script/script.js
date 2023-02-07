@@ -47,37 +47,54 @@ const products = [
 
 // 1) создать функцию getProduct, которая в качестве аргумента получает id продукта и возвращает его
 function getProduct(id) {
-    
-     return products.find(obj => obj.id === id)};
+     return products.find(({productid}) => productid === id)};
       console.log(getProduct());
     
 
 // 2) создать функцию getTotalPrice, которая не получает аргументов и возвращает общую сумму всех товаров. Произмедение кол-ва на цену и сумма этого значения у всех товаров. 
-
+function getTotalPrice(){
+    return products.reduce((pre, {price, count}) => pre + price * count, 0)
+}
+    /*
     const sum = products.reduce(function getTotalPrice (accumulator, currentValue) {
         return accumulator + currentValue.price * currentValue.count;
     }, 0);
 
     console.log(sum); 
+*/
 
 // 3) создать функцию, getAvgMark  которая получает в качестве аргумента id продукта и возвращает среднюю оценку данного продукта.
 function getAvgMark(id) {
-    return products.reduce((prev, id) => prev + id.marks, 0) / id.length;
+    const target = products.find(({productid}) => productid === id).marks;
+    return target.reduce((a, b) => a+b) / target.length;
+    // return target.reduce((prev, id) => prev + id.marks, 0) / id.length;
   }
-  console.log(getAvgMark(products));
+  console.log(target);
 
 // 4) создать функцию, getAvgMarkByCategory которая получает в качестве аргумента id категории и возвращает среднюю оценку всех товаров данной категории.
 function getAvgMarkByCategory(id) {
-    return products.reduce((prev, id) => prev + id.categoryid, 0) / id.length;
+    const target = products.find(({categoryid}) => categoryid === id)
+                        .reduce(({prev, marks}) => [...prev, ...marks], [])
+    return target.reduce((a, b) => a+b) / target.length;
+    //return products.reduce((prev, id) => prev + id.categoryid, 0) / id.length;
   }
-  console.log(getAvgMarkByCategory(products));
+  console.log(getAvgMarkByCategory(target));
 
 // 5) создайте функцию getLovelyProduct которая возвращает продукт с наибольшим рейтингом
-function getLovelyProduct(users) {
-    return users.reduce((prev, item) => prev > item.productid ? prev : item) ;
-  }
-  console.log(getLovelyProduct(products));
+const getLovelyProduct = () =>
+     products.map(product =>({...product,
+        avg_mark: product.marks.reduce((a, b) => a + b) / product.marks.length
+})).reduce((prev, item) => prev.avg_mark > item.avg_mark ? prev : item);
 
-// Готовую работу опубликуйте в github и сдайте ссылку на него.
+
+// function getLovelyProduct() {
+    // const new_arr = products.map(product =>{
+    //     const marks_sum = product.marks.reduce((a, b) => a + b);
+    //     product.avg_mark = marks_sum / product.marks.length;
+    //     return product
+    // })
+    // const target = new_arr.reduce((prev, item) => prev.avg_mark > item.avg_mark ? prev : item);
+    // return target;
+
 
 
